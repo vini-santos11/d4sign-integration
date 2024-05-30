@@ -1,0 +1,10 @@
+services:
+  db:
+    image: bitnami/postgresql:latest
+    container_name: db_d4sign
+    environment:
+      - POSTGRESQL_USERNAME=app
+      - POSTGRESQL_PASSWORD=app
+      - POSTGRESQL_DATABASE=d4sign
+    ports:
+      - 5440:5432
