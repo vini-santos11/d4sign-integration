@@ -21,7 +21,8 @@ export async function downloadFile(fileId: string | undefined) {
             const document: DownloadDocument = response.data;
             console.log(document)
 
-            const destination = String(`/Users/vinicius/Documents/d4sign/${document.name.replace(/ /g, "-")}.pdf`, )
+            const destination = String(`/Users/vinicius/Documents/d4sign/${document.name}.pdf`, )
+            //E:/G_/Arquivos_2/ContratosAssinados
 
             await axios({
                 url: document.url,
