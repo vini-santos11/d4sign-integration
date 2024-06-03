@@ -3,26 +3,22 @@ import { prisma } from "./lib/prisma";
 import cron from "node-cron";
 
 async function main() {
-    try { 
-        //cron schedule 1 minute
-        // cron.schedule('*/1 * * * *', async () => {
-            
-        // })
-
-        //cron schedule 1 hour
-        cron.schedule('*/1 * * * *', async () => {
+    try {
+        // Run every 70 minutes
+        cron.schedule('*/70 * * * *', async () => {
             console.log(new Date() + 'downloading document...')
 
             //get top 100 documents
             const documents = await prisma.pDF.findMany({
-                take: 1,
+                take: 100,
                 where: {
                     already_downloaded: false
                 }
             });
 
             documents.forEach(async document => {
-                await downloadFile(document?.id_d4sign)
+                let i = 1;
+                await downloadFile(document?.id_d4sign, i)
             
                 if(document != null)
                     document.already_downloaded = true
@@ -35,6 +31,7 @@ async function main() {
                         already_downloaded: true
                     }
                 })
+                i++;
             })
         })
     } catch (error) {

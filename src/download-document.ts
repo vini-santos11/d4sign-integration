@@ -10,38 +10,29 @@ export interface DownloadDocument {
     name: string
 }
 
-export async function downloadFile(fileId: string | undefined) {
+export async function downloadFile(fileId: string | undefined, number: number) {
     try {
-        await axiosInstance.post(`/documents/${fileId}/download`, { type: 'pdf', language: 'pt' }, {
+        const response = await axiosInstance.post(`/documents/${fileId}/download`, { type: 'pdf', language: 'pt' }, {
             params: {
                 tokenAPI: process.env.SECRET_KEY,
                 cryptKey: process.env.CRYPT_KEY,
             }
-        }).then( async response => {
-            const document: DownloadDocument = response.data;
-            console.log(document)
+        })
+        
+        const document: DownloadDocument = response.data;
+        console.log(document)
 
-            const destination = String(`/Users/vinicius/Documents/d4sign/${document.name}.pdf`, )
-            //E:/G_/Arquivos_2/ContratosAssinados
+        const destination = String(`/Users/vinicius/Documents/d4sign/${document.name}.pdf`)
+        //E:/G_/Arquivos_2/ContratosAssinados
 
-            await axios({
-                url: document.url,
-                method: 'GET',
-                responseType: 'stream',
-            }).then(response => {
-                response.data.pipe(fs.createWriteStream(destination))
-                return new Promise((resolve, reject) => {
-                    response.data.on('end', () => {
-                        resolve(destination)
-                    })
-                    response.data.on('error', (err: any) => {
-                        reject(err)
-                    })
-                })
-            })
-        });
-              
+        const documentFetchted = await axios({
+            url: document.url,
+            method: 'GET',
+            responseType: 'stream',
+        })
 
+        documentFetchted.data.pipe(fs.createWriteStream(destination))
+        console.log(number + 'Document downloaded successfully!')
     } catch (error) {
         console.error(error);
     }
