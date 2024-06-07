@@ -4,8 +4,8 @@ import cron from "node-cron";
 
 async function main() {
     try {
-        // Run every 70 minutes
-        cron.schedule('*/70 * * * *', async () => {
+        //cron schedule 2 hours
+        cron.schedule('0 */2 * * *', async () => {
             console.log(new Date() + 'downloading document...')
 
             //get top 100 documents
@@ -17,8 +17,8 @@ async function main() {
             });
 
             documents.forEach(async document => {
-                let i = 1;
-                await downloadFile(document?.id_d4sign, i)
+                let i = 0;
+                await downloadFile(document?.id_d4sign, i++)
             
                 if(document != null)
                     document.already_downloaded = true
@@ -31,7 +31,6 @@ async function main() {
                         already_downloaded: true
                     }
                 })
-                i++;
             })
         })
     } catch (error) {

@@ -20,7 +20,8 @@ export async function downloadFile(fileId: string | undefined, number: number) {
         })
         
         const document: DownloadDocument = response.data;
-        console.log(document)
+
+        document.name = document.name.replace("/", " -");
 
         const destination = String(`/Users/vinicius/Documents/d4sign/${document.name}.pdf`)
         //E:/G_/Arquivos_2/ContratosAssinados
